@@ -11,82 +11,79 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 
 public class MainActivity extends AppCompatActivity {
-    // IDs of all the numeric buttons
+    // ID dari semua tombol numerik
     private int[] numericButtons = {R.id.btnZero, R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine};
-    // IDs of all the operator buttons
+    // ID semua tombol operator
     private int[] operatorButtons = {R.id.btnAdd, R.id.btnSubtract, R.id.btnMultiply, R.id.btnDivide};
-    // TextView used to display the output
+    // Menampilkan output
     private TextView txtScreen;
-    // Represent whether the lastly pressed key is numeric or not
+    // Nyatakan apakah tombol yang terakhir ditekan adalah angka atau bukan
     private boolean lastNumeric;
-    // Represent that current state is in error or not
+    // Menyatakan bahwa keadaan saat ini dalam kesalahan atau tidak
     private boolean stateError;
-    // If true, do not allow to add another DOT
+    // Jika benar, jangan izinkan untuk menambahkan DOT lain
     private boolean lastDot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Find the TextView
+        // TextView
         this.txtScreen = (TextView) findViewById(R.id.txtScreen);
-        // Find and set OnClickListener to numeric buttons
+        // sett OnClickListener ke tombol numerik
         setNumericOnClickListener();
-        // Find and set OnClickListener to operator buttons, equal button and decimal point button
+        // Mengatur OnClickListener ke tombol operator, tombol sama dengan dan tombol titik desimal
         setOperatorOnClickListener();
     }
 
     /**
-     * Find and set OnClickListener to numeric buttons.
+     * sett OnClickListener ke tombol numerik.
      */
     private void setNumericOnClickListener() {
-        // Create a common OnClickListener
+        // Membuat OnClickListener
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Just append/set the text of clicked button
+                // Cukup tambahkan/atur teks tombol yang diklik
                 Button button = (Button) v;
                 if (stateError) {
-                    // If current state is Error, replace the error message
+                    // Jika eror, tampilkan pesan eror
                     txtScreen.setText(button.getText());
                     stateError = false;
                 } else {
-                    // If not, already there is a valid expression so append to it
+                    // Jika tidak, sudah ada ekspresi yang valid jadi tambahkan
                     txtScreen.append(button.getText());
                 }
-                // Set the flag
                 lastNumeric = true;
             }
         };
-        // Assign the listener to all the numeric buttons
         for (int id : numericButtons) {
             findViewById(id).setOnClickListener(listener);
         }
     }
 
     /**
-     * Find and set OnClickListener to operator buttons, equal button and decimal point button.
+     * Mengatur OnClickListener ke tombol operator, tombol sama dengan dan tombol titik desimal.
      */
     private void setOperatorOnClickListener() {
-        // Create a common OnClickListener for operators
+        // Membuan OnClick
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // If the current state is Error do not append the operator
-                // If the last input is number only, append the operator
+                // Jika status saat ini Error, jangan tambahkan operator
+                // Jika input terakhir hanya angka, tambahkan operator
                 if (lastNumeric && !stateError) {
                     Button button = (Button) v;
                     txtScreen.append(button.getText());
                     lastNumeric = false;
-                    lastDot = false;    // Reset the DOT flag
+                    lastDot = false;
                 }
             }
         };
-        // Assign the listener to all the operator buttons
         for (int id : operatorButtons) {
             findViewById(id).setOnClickListener(listener);
         }
-        // Decimal point
+        // Titik desimal '.'
         findViewById(R.id.btnDot).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        // Clear button
+        // Tombol hapus 'C'
         findViewById(R.id.btnClear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 lastDot = false;
             }
         });
-        // Equal button
+        // Tombol sama dengan '='
         findViewById(R.id.btnEqual).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Logic to calculate the solution.
+     * Logika untuk menghitung solusi.
      */
     private void onEqual() {
-        // If the current state is error, nothing to do.
-        // If the last input is a number only, solution can be found.
+        // Jika eror,
+        // jika input angka, solusi ditemukan
         if (lastNumeric && !stateError) {
             // Read the expression
             String txt = txtScreen.getText().toString();
