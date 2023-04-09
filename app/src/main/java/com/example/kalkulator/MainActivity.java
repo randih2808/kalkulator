@@ -121,17 +121,17 @@ public class MainActivity extends AppCompatActivity {
         // Jika eror,
         // jika input angka, solusi ditemukan
         if (lastNumeric && !stateError) {
-            // Read the expression
+            // Baca ekspresi
             String txt = txtScreen.getText().toString();
-            // Create an Expression (A class from exp4j library)
+            // Membuat (dari kelas library exp4j)
             Expression expression = new ExpressionBuilder(txt).build();
             try {
-                // Calculate the result and display
+                // Hitung hasilnya dan tampilkan
                 double result = expression.evaluate();
                 txtScreen.setText(String.valueOf(result));
                 lastDot = true; // Result contains a dot
             } catch (ArithmeticException ex) {
-                // Display an error message
+                // Menampilkan pesan eror
                 txtScreen.setText("Error");
                 stateError = true;
                 lastNumeric = false;
